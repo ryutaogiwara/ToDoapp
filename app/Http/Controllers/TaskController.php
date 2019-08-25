@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(int $id)
     {
         // モデル内のFolderメソッドから配列でデータを引き出し変数に入れる処理
         // データの入った変数はreturnで返り値を指定しviewに渡される
@@ -15,6 +15,7 @@ class TaskController extends Controller
         $folders = Folder::all();
         return view ('tasks/index',[
             'folders' => $folders,
+            'current_folder_id' => $id,
         ]);
     }
 }
