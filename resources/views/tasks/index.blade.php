@@ -51,8 +51,8 @@
               <thead>
                 <tr>
                   <th>タイトル</th>
-                  <th>期限</th>
                   <th>状態</th>
+                  <th>期限</th>
                   <th></th>
                 </tr>
               </thead>
@@ -63,10 +63,10 @@
                     {{$task->title}}
                   </td>
                   <td>
-                    <span class="label">{{$task->status}}</span>
+                    <span class="label {{$task->status_class}}">{{$task->status_label}}</span>
                   </td>
                   <td>
-                    {{$task->due_date}}
+                    {{$task->formatted_due_date}}
                   </td>
                   <td>
                     <a href="#">編集</a>
