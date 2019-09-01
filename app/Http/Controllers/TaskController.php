@@ -18,8 +18,7 @@ class TaskController extends Controller
         $current_folder = Folder::find($id);
 
         // 選択されたフォルダに紐づくタスクを全て取得する
-        // whereはクエリビルダの一種。第一引数にカラム名、第二引数に比較値が入り最後にSQLクエリとして走るようにgetメソッドを用いる
-        $tasks = Task::where('folder_id',$current_folder->id)->get();
+        $tasks = $current_folder->tasks()->get();
 
         // データの入った変数はreturnで返り値を指定しviewに渡される
         // viewの引数は第一引数に読み込むテンプレートファイル名、第二引数に実際に送るデータが書かれている
