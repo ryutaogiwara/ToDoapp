@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Folder;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateFolder;
 
 class FolderController extends Controller
 {
@@ -13,7 +14,7 @@ class FolderController extends Controller
     }
 
     // コントローラーメソッドが呼び出されるときに Laravel がリクエストの情報を Request クラスのインスタンス $request に詰めて引数として渡す
-    public function create(Request $request)
+    public function create(CreateFolder $request)
     {
         // フォルダモデルの新規インスタンスを作成
         $folder = new Folder();
