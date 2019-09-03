@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 // モデルの読み込み
 use App\Folder;
 use App\Task;
-
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateTask;
 
 class TaskController extends Controller
 {
@@ -36,18 +36,23 @@ class TaskController extends Controller
         ]);
     }
 
-    // // コントローラーメソッドが呼び出されるときに Laravel がリクエストの情報を Request クラスのインスタンス $request に詰めて引数として渡す
-    // public function create(CreateFolder $request)
-    // {
-    //     // フォルダモデルの新規インスタンスを作成
-    //     $folder = new Folder();
-    //     // $folderインスタンスのタイトルに$requestインスタンスのタイトル入力値を代入
-    //     $folder->title = $request->title;
-    //     // インスタンスの情報をDBに保存
-    //     $folder->save();
+    // コントローラーメソッドが呼び出されるときに Laravel がリクエストの情報を Request クラスのインスタンス $request に詰めて引数として渡す
+    public function create(int $id, CreateTask $request)
+    {
+        // idを基に紐づいたフォルダを特定
+        $current_folder = Folder::find($id);
 
-    //     return redirect()->route('tasks.index', [
-    //         'id' => $folder->id,
-    //     ]);
-    // }
+        // 新しいタスクインスタンス作成
+        $task = new Task();
+        // $taskインスタンスのタイトル/期限にに$requestインスタンスの各プロパティを代入
+        $task->title = $request->title;
+        $task->due_date = $request->due_date;
+
+        // 設定したリレーションを基にフォルダに紐づいたタスクとして保存
+        $current_folder->tasks()->save($task);
+
+        return redirect()->route('tasks.index', [
+            'id' => $current_folder->id,
+        ]);
+    }
 }
