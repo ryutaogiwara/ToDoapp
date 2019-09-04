@@ -12,3 +12,5 @@ Route::post('folders/{id}/tasks/create', 'TaskController@create');
 // タスク編集
 Route::get('folders/{id}/tasks/{task_id}/edit', 'TaskController@showEditForm')->name('tasks.edit');
 Route::post('folders/{id}/tasks/{task_id}/edit', 'TaskController@edit');
+// ホーム画面
+Route::get('/', 'HomeController@index')->name('hhome');
