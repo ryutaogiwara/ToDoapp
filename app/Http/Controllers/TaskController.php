@@ -22,7 +22,7 @@ class TaskController extends Controller
 
         // データの入った変数はreturnで返り値を指定しviewに渡される
         // viewの引数は第一引数に読み込むテンプレートファイル名、第二引数に実際に送るデータが書かれている
-        return view ('tasks/index',[
+        return view('tasks/index', [
             'folders' => $folders,
             'current_folder_id' => $id,
             'tasks' => $tasks,
@@ -31,7 +31,7 @@ class TaskController extends Controller
 
     public function showCreateForm(int $id)
     {
-        return view('tasks/create',[
+        return view('tasks/create', [
             'folder_id' => $id
         ]);
     }
@@ -53,6 +53,15 @@ class TaskController extends Controller
 
         return redirect()->route('tasks.index', [
             'id' => $current_folder->id,
+        ]);
+    }
+
+    public function showEditForm(int $id, int $task_id)
+    {
+        $task = Task::find($task_id);
+
+        return view('task/edit', [
+            'task' => $task,
         ]);
     }
 }
