@@ -12,7 +12,7 @@
 <body>
   <header>
     <nav class="my-navbar">
-      <a class="my-navbar-brand" href="/public/">ToDo App</a>
+      <a class="my-navbar-brand" href="{{ route('home') }}">ToDo App</a>
       <div class="my-navbar-control">
         <!-- ログインしてるかt/fで返す -->
         @if(Auth::check())
@@ -20,7 +20,7 @@
         <span class="my-navbar-item">ようこそ, {{ Auth::user()->name }}さん</span>
         |
         <a href="#" id="logout" class="my-navbar-item">ログアウト</a>
-        <form id="logut-form" action="{{ route('logout') }}" method="post" style="display: none;">
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
           @csrf
         </form>
         @else
@@ -35,16 +35,16 @@
   <main>
     @yield('content')
   </main>
-  @yield('scripts')
   <!-- ログアウト処理 -->
   @if(Auth::check())
   <script>
     document.getElementById('logout').addEventListener('click', function(event) {
-      event.priventDefault();
+      event.preventDefault();
       document.getElementById('logout-form').submit();
     });
   </script>
   @endif
+  @yield('scripts')
 </body>
 
 </html>
