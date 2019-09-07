@@ -18,7 +18,7 @@
             </ul>
           </div>
           @endif
-          <form action="{{ route('folders.create') }}" method="post">
+          <form action="{{ route('folders.create') }}" method="POST">
             @csrf
             <div class="form-group">
               <label for="title">フォルダ名</label>
