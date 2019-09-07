@@ -17,10 +17,6 @@ class TaskController extends Controller
     //   ＊@return \Illuminate\View\View
     public function index(Folder $folder)
     {
-        if (Auth::user()->id !== $folder->user_id) {
-            abort(403);
-        }
-
         // ユーザーのフォルダを取得
         $folders = Auth::user()->folders()->get();
 
