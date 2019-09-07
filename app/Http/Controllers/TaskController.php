@@ -11,76 +11,95 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index(int $id)
+
+    //   タスク一覧
+    //   ＊@param Folder $folder
+    //   ＊@return \Illuminate\View\View
+    public function index(Folder $folder)
     {
         // ユーザーのフォルダを取得
         $folders = Auth::user()->folders()->get();
 
-        // 選択されたフォルダを取得する
-        $current_folder = Folder::find($id);
-
         // 選択されたフォルダに紐づくタスクを全て取得する
-        $tasks = $current_folder->tasks()->get();
+        $tasks = $folder->tasks()->get();
 
         // データの入った変数はreturnで返り値を指定しviewに渡される
         // viewの引数は第一引数に読み込むテンプレートファイル名、第二引数に実際に送るデータが書かれている
         return view('tasks/index', [
             'folders' => $folders,
-            'current_folder_id' => $id,
+            'current_folder_id' => $folder->id,
             'tasks' => $tasks,
         ]);
     }
 
-    public function showCreateForm(int $id)
+    // タスク作成フォーム
+    //  * @param Folder $folder
+    //  * @return \Illuminate\View\View
+    public function showCreateForm(Folder $folder)
     {
         return view('tasks/create', [
-            'folder_id' => $id
+            'folder_id' => $folder->id,
         ]);
     }
 
-    // コントローラーメソッドが呼び出されるときに Laravel がリクエストの情報を Request クラスのインスタンス $request に詰めて引数として渡す
-    public function create(int $id, CreateTask $request)
+    // タスク作成
+    //  * @param Folder $folder
+    //  * @param CreateTask $request
+    //  * @return \Illuminate\Http\RedirectResponse
+    public function create(Folder $folder, CreateTask $request)
     {
-        // idを基に紐づいたフォルダを特定
-        $current_folder = Folder::find($id);
-
-        // 新しいタスクインスタンス作成
         $task = new Task();
-        // $taskインスタンスのタイトル/期限にに$requestインスタンスの各プロパティを代入
+        // $taskインスタンスのタイトル/期限に$requestインスタンスの各プロパティを代入
         $task->title = $request->title;
         $task->due_date = $request->due_date;
 
         // 設定したリレーションを基にフォルダに紐づいたタスクとして保存
-        $current_folder->tasks()->save($task);
+        $folder->tasks()->save($task);
 
         return redirect()->route('tasks.index', [
-            'id' => $current_folder->id,
+            'id' => $folder->id,
         ]);
     }
 
-    public function showEditForm(int $id, int $task_id)
+    // タスク編集フォーム
+    //  * @param Folder $folder
+    //  * @param Task $task
+    //  * @return \Illuminate\View\View
+    public function showEditForm(Folder $folder, Task $task)
     {
-        $task = Task::find($task_id);
+        $this->checkRelation($folder, $task);
 
         return view('tasks/edit', [
             'task' => $task,
         ]);
     }
 
-    public function edit(int $id, int $task_id, EditTask $request)
+    // タスク編集
+    //  * @param Folder $folder
+    //  * @param Task $task
+    //  * @param EditTask $request
+    //  * @return \Illuminate\Http\RedirectResponse
+    public function edit(Folder $folder, Task $task, EditTask $request)
     {
-        // 1
-        $task = Task::find($task_id);
+        $this->checkRelation($folder, $task);
 
-        // 2
         $task->title = $request->title;
         $task->status = $request->status;
         $task->due_date = $request->due_date;
         $task->save();
 
-        // 3
         return redirect()->route('tasks.index', [
             'id' => $task->folder_id,
         ]);
+    }
+
+    // フォルダとタスクの関連性があるか調べる
+    //  * @param Folder $folder
+    //  * @param Task $task
+    public function checkRelation(Folder $folder, Task $task)
+    {
+        if ($folder->id !== $task->folder_id) {
+            abort(404);
+        }
     }
 }
