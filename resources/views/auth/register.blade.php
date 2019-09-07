@@ -20,7 +20,7 @@
             </ul>
           </div>
           @endif
-          <form action="{{ route('register') }}" method="post">
+          <form action="{{ route('register') }}" method="POST">
             @csrf
             <div class="form-group">
               <label for="email">メールアドレス</label>
