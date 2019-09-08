@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToDo App</title>
   @yield('styles')
-  <link rel="stylesheet" href="{{ secure_asset('/css/styles.css') }}">
+  <link rel="stylesheet" href="{{ asset('/css/styles.css') }}">
 </head>
 
 <body>
